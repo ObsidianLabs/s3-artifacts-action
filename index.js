@@ -3,7 +3,6 @@ const S3 = require('aws-sdk/clients/s3');
 const fs = require('fs');
 const path = require('path');
 const shortid = require('shortid');
-const klawSync = require('klaw-sync');
 const { lookup } = require('mime-types');
 
 const AWS_KEY_ID = core.getInput('aws_access_key_id', {
@@ -37,6 +36,7 @@ const s3 = new S3({
 });
 
 const destinationDir = DESTINATION_DIR === '/' ? shortid() : DESTINATION_DIR;
+const files = fs.readdirSync(SOURCE_DIR);
 
 
 function upload(params) {
@@ -61,22 +61,21 @@ function slash(path) {
 	return path.replace(/\\/g, '/');
 }
 
-async function run() {
+function run() {
 	try {
 		const sourceDir = path.join(process.cwd(), SOURCE_DIR);
 		const regex = /^.*\.(dmg|zip|exe|AppImage)$/
-		const paths = await fs.readdir(SOURCE_DIR);
-		const validPaths = paths.filter(p => new RegExp(regex).test(p.path));
+		const validPaths = files.filter(path => new RegExp(regex).test(path));
 
 		return Promise.all(
-			validPaths.map(p => {
-				const fileStream = fs.createReadStream(p.path);
-				const bucketPath = path.join(destinationDir, path.relative(sourceDir, p.path));
+			validPaths.map(path => {
+				const fileStream = fs.createReadStream(path);
+				const bucketPath = path.join(destinationDir, path.relative(sourceDir, path));
 				const params = {
 					Bucket: BUCKET,
 					Body: fileStream,
 					Key: slash(bucketPath),
-					ContentType: lookup(p.path) || 'text/plain'
+					ContentType: lookup(path) || 'text/plain'
 				};
 				return upload(params);
 			})
@@ -85,6 +84,7 @@ async function run() {
 		throw new Error(error)
 	}
 }
+
 
 run()
 	.then(locations => {
