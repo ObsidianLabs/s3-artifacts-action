@@ -1206,13 +1206,13 @@ const shortid = __webpack_require__(354);
 const klawSync = __webpack_require__(502);
 const { lookup } = __webpack_require__(779);
 
-const AWS_KEY_ID = core.getInput('aws_key_id', {
+const AWS_KEY_ID = core.getInput('aws_access_key_id', {
   required: true
 });
 const SECRET_ACCESS_KEY = core.getInput('aws_secret_access_key', {
   required: true
 });
-const BUCKET = core.getInput('aws_bucket', {
+const BUCKET = core.getInput('aws_s3_bucket_name', {
   required: true
 });
 const SOURCE_DIR = core.getInput('source_dir', {
@@ -1271,6 +1271,7 @@ run()
     core.error(err);
     core.setFailed(err.message);
   });
+
 
 /***/ }),
 
