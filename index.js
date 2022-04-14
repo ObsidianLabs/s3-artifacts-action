@@ -6,7 +6,7 @@ const shortid = require('shortid');
 const klawSync = require('klaw-sync');
 const { lookup } = require('mime-types');
 
-const AWS_KEY_ID = core.getInput('aws_key_id', {
+const AWS_KEY_ID = core.getInput('aws_access_key_id', {
   required: true
 });
 const SECRET_ACCESS_KEY = core.getInput('aws_secret_access_key', {
