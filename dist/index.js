@@ -1253,24 +1253,39 @@ function upload(params) {
 	});
 }
 
-function run() {
-	const sourceDir = path.join(process.cwd(), SOURCE_DIR);
-	const regex = /^.*\.(dmg|zip|exe|AppImage|yml)$/
-	const validPaths = paths.filter(p => new RegExp(regex).test(p.path));
+function slash(path) {
+	const isExtendedLengthPath = /^\\\\\?\\/.test(path);
+	const hasNonAscii = /[^\u0000-\u0080]+/.test(path);
 
-	return Promise.all(
-		validPaths.map(p => {
-			const fileStream = fs.createReadStream(p.path);
-			const bucketPath = path.join(destinationDir, path.relative(sourceDir, p.path));
-			const params = {
-				Bucket: BUCKET,
-				Body: fileStream,
-				Key: bucketPath,
-				ContentType: lookup(p.path) || 'text/plain'
-			};
-			return upload(params);
-		})
-	);
+	if (isExtendedLengthPath || hasNonAscii) {
+		return path;
+	}
+
+	return path.replace(/\\/g, '/');
+}
+
+function run() {
+	try {
+		const sourceDir = path.join(process.cwd(), SOURCE_DIR);
+		const regex = /^.*\.(dmg|zip|exe|AppImage|yml)$/
+		const validPaths = paths.filter(p => new RegExp(regex).test(p.path));
+
+		return Promise.all(
+			validPaths.map(p => {
+				const fileStream = fs.createReadStream(p.path);
+				const bucketPath = path.join(destinationDir, path.relative(sourceDir, p.path));
+				const params = {
+					Bucket: BUCKET,
+					Body: fileStream,
+					Key: slash(bucketPath),
+					ContentType: lookup(p.path) || 'text/plain'
+				};
+				return upload(params);
+			})
+		);
+	} catch (error) {
+		throw new Error(error)
+	}
 }
 
 run()
