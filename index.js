@@ -9,24 +9,35 @@ const { lookup } = require('mime-types');
 const AWS_KEY_ID = core.getInput('aws_access_key_id', {
   required: true
 });
+
 const SECRET_ACCESS_KEY = core.getInput('aws_secret_access_key', {
   required: true
 });
+
 const BUCKET = core.getInput('aws_s3_bucket_name', {
   required: true
 });
+
 const SOURCE_DIR = core.getInput('source_dir', {
   required: true
 });
+
 const DESTINATION_DIR = core.getInput('destination_dir', {
   required: false
 });
 
+const AWS_REGION = core.getInput('aws_region', {
+	required: true
+});
+
 const s3 = new S3({
   accessKeyId: AWS_KEY_ID,
-  secretAccessKey: SECRET_ACCESS_KEY
+  secretAccessKey: SECRET_ACCESS_KEY,
+	region: AWS_REGION
 });
+
 const destinationDir = DESTINATION_DIR === '/' ? shortid() : DESTINATION_DIR;
+
 const paths = klawSync(SOURCE_DIR, {
   nodir: true
 });
