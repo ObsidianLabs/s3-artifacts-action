@@ -1250,7 +1250,6 @@ function run() {
       const bucketPath = path.join(destinationDir, path.relative(sourceDir, p.path));
       const params = {
         Bucket: BUCKET,
-        ACL: 'public-read',
         Body: fileStream,
         Key: bucketPath,
         ContentType: lookup(p.path) || 'text/plain'
