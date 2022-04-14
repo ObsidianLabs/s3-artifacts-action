@@ -1,0 +1,26 @@
+{
+  "name": "s3-artfacts-action",
+  "description": "Upload artfacts to AWS S3",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "repository": "https://github.com/ObsidianLabs/s3-artifacts-action",
+  "author": "inorthisle",
+  "scripts": {
+    "build": "ncc build index.js -o dist"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "aws-sdk": "^2.641.0",
+    "klaw-sync": "^6.0.0",
+    "mime-types": "^2.1.26",
+    "shortid": "^2.2.15"
+  },
+  "devDependencies": {
+    "@zeit/ncc": "^0.21.1",
+    "prettier": "^1.19.1"
+  },
+  "prettier": {
+    "singleQuote": true
+  }
+}
