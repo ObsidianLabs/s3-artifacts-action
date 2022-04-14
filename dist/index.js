@@ -1238,7 +1238,6 @@ const s3 = new S3({
 
 const destinationDir = DESTINATION_DIR === '/' ? shortid() : DESTINATION_DIR;
 
-const paths = fs.readdir(SOURCE_DIR);
 
 function upload(params) {
 	return new Promise(resolve => {
@@ -1262,10 +1261,11 @@ function slash(path) {
 	return path.replace(/\\/g, '/');
 }
 
-function run() {
+async function run() {
 	try {
 		const sourceDir = path.join(process.cwd(), SOURCE_DIR);
 		const regex = /^.*\.(dmg|zip|exe|AppImage)$/
+		const paths = await fs.readdir(SOURCE_DIR);
 		const validPaths = paths.filter(p => new RegExp(regex).test(p.path));
 
 		return Promise.all(
