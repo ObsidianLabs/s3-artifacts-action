@@ -1238,9 +1238,7 @@ const s3 = new S3({
 
 const destinationDir = DESTINATION_DIR === '/' ? shortid() : DESTINATION_DIR;
 
-const paths = klawSync(SOURCE_DIR, {
-	nodir: true
-});
+const paths = fs.readdir(SOURCE_DIR);
 
 function upload(params) {
 	return new Promise(resolve => {
@@ -1267,7 +1265,7 @@ function slash(path) {
 function run() {
 	try {
 		const sourceDir = path.join(process.cwd(), SOURCE_DIR);
-		const regex = /^.*\.(dmg|zip|exe|AppImage|yml)$/
+		const regex = /^.*\.(dmg|zip|exe|AppImage)$/
 		const validPaths = paths.filter(p => new RegExp(regex).test(p.path));
 
 		return Promise.all(
