@@ -12,7 +12,7 @@ const AWS_KEY_ID = core.getInput('aws_access_key_id', {
 const SECRET_ACCESS_KEY = core.getInput('aws_secret_access_key', {
   required: true
 });
-const BUCKET = core.getInput('aws_bucket', {
+const BUCKET = core.getInput('aws_s3_bucket_name', {
   required: true
 });
 const SOURCE_DIR = core.getInput('source_dir', {
