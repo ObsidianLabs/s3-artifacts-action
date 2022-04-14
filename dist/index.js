@@ -1258,7 +1258,7 @@ function slash(path) {
 	if (isExtendedLengthPath || hasNonAscii) {
 		return path;
 	}
-
+	console.log(path)
 	return path.replace(/\\/g, '/');
 }
 
