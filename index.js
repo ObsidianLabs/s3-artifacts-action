@@ -78,7 +78,6 @@ function run() {
 				const params = {
 					Bucket: BUCKET,
 					Body: fileStream,
-					ACL: 'public-read',
 					Key: slash(bucketPath),
 					ContentType: lookup(p.path) || 'text/plain'
 				};
